@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lens & Light - Professional Photography</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(15px);
+            padding: 20px 60px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #fff 0%, #999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #fff;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(15, 15, 15, 0.98);
+            backdrop-filter: blur(10px);
+            min-width: 240px;
+            padding: 20px 0;
+            list-style: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 30px;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+        }
+
+        .dropdown-menu a::after {
+            display: none;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255, 255, 255, 0.08);
+            padding-left: 40px;
+        }
+
+        .hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            transform: translateY(0);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 300;
+            letter-spacing: 10px;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.7);
+        }
+
+        .hero p {
+            font-size: 16px;
+            letter-spacing: 4px;
+            opacity: 0.9;
+            font-family: 'Arial', sans-serif;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 45px;
+            border: 2px solid #fff;
+            color: #fff;
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        .cta-button:hover {
+            background: #fff;
+            color: #0a0a0a;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
+        }
+
+        .services {
+            padding: 140px 60px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #0f0f0f 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 300;
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 14px;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            margin-bottom: 80px;
+            font-family: 'Arial', sans-serif;
+            text-transform: uppercase;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 50px 35px;
+            text-align: center;
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .service-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-15px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .service-icon {
+            font-size: 52px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .service-card h3 {
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            line-height: 1.9;
+            opacity: 0.7;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .gallery {
+            padding: 140px 60px;
+            background: #0a0a0a;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .photo-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+            display: block;
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.12);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.9) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 35px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-title {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .photo-desc {
+            font-size: 13px;
+            opacity: 0.8;
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .blog {
+            padding: 140px 60px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #121212 100%);
+        }
+
+        .blog-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 70px;
+        }
+
+        .blog-posts {
+            display: grid;
+            gap: 50px;
+        }
+
+        .blog-post {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 45px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 35px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+
+        .blog-post.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .blog-post:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .blog-post:hover .blog-image {
+            transform: scale(1.05);
+        }
+
+        .blog-content h3 {
+            font-size: 26px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .blog-meta {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 18px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .blog-excerpt {
+            font-size: 14px;
+            line-height: 1.9;
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .read-more {
+            display: inline-block;
+            padding: 10px 28px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            text-decoration: none;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            background: #fff;
+            color: #0a0a0a;
+            border-color: #fff;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 140px;
+            height: fit-content;
+        }
+
+        .sidebar-widget {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 35px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-widget h3 {
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .recent-posts {
+            list-style: none;
+        }
+
+        .recent-posts li {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13px;
+            opacity: 0.7;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .recent-posts li:hover {
+            opacity: 1;
+            padding-left: 12px;
+        }
+
+        .about {
+            padding: 140px 60px;
+            background: #0a0a0a;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 90px;
+            align-items: center;
+        }
+
+        .about-content {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .about-content.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-content h2 {
+            font-size: 48px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+        }
+
+        .about-content p {
+            font-size: 15px;
+            line-height: 2;
+            opacity: 0.8;
+            margin-bottom: 22px;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 38px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        .about-image {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+
+        .about-image.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 550px;
+            object-fit: cover;
+        }
+
+        .contact {
+            padding: 140px 60px;
+            background: linear-gradient(180deg, #0f0f0f 0%, #0a0a0a 100%);
+        }
+
+        .contact-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 60px;
+            margin-top: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .contact-form.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 15px 20px;
+            color: #fff;
+            font-size: 14px;
+            font-family: 'Arial', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .submit-btn:hover {
+            background: #fff;
+            color: #0a0a0a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        footer {
+            padding: 80px 60px 40px;
+            background: #000;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 45px;
+            margin-bottom: 40px;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            opacity: 0.6;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            opacity: 1;
+            transform: translateY(-4px);
+        }
+
+        footer p {
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.4;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .blog-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .blog-post {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 30px;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+                letter-spacing: 4px;
+            }
+
+            .hero p {
+                font-size: 12px;
+            }
+
+            .services, .gallery, .blog, .about, .contact {
+                padding: 80px 30px;
+            }
+
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 35px;
+            }
+
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="logo">LENS & LIGHT</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li class="dropdown">
+                <a href="#services">Services</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#services">Wedding Photography</a></li>
+                    <li><a href="#services">Portrait Sessions</a></li>
+                    <li><a href="#services">Commercial Shoots</a></li>
+                    <li><a href="#services">Event Coverage</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#gallery">Portfolio</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#gallery">Featured Works</a></li>
+                    <li><a href="#gallery">Recent Projects</a></li>
+                    <li><a href="#gallery">Client Gallery</a></li>
+                </ul>
+            </li>
+            <li><a href="#blog">Articles</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-content">
+            <h1>CAPTURING MOMENTS</h1>
+            <p>PROFESSIONAL PHOTOGRAPHY THAT TELLS YOUR STORY</p>
+            <a href="#contact" class="cta-button">Get in Touch</a>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <h2 class="section-title" id="servicesTitle">Our Services</h2>
+        <p class="section-subtitle">Premium photography solutions tailored to your vision</p>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">💍</div>
+                <h3>Wedding Photography</h3>
+                <p>Capture your special day with timeless elegance. We document every precious moment, from intimate preparations to grand celebrations, creating memories that last forever.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">👤</div>
+                <h3>Portrait Sessions</h3>
+                <p>Professional portraits that reflect your unique personality. Perfect for individuals, families, and corporate headshots with artistic direction.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🏢</div>
+                <h3>Commercial Shoots</h3>
+                <p>High-quality imagery for brands and businesses. Product photography, advertising campaigns, and corporate content that drives engagement.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎉</div>
+                <h3>Event Coverage</h3>
+                <p>Comprehensive documentation of corporate events, conferences, and special occasions with cinematic quality and professional excellence.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery" id="gallery">
+        <h2 class="section-title" id="galleryTitle">Featured Portfolio</h2>
+        <p class="section-subtitle">A glimpse into our creative journey</p>
+        <div class="photo-grid">
+            <div class="photo-item">
+                <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=800&q=80" alt="Urban Architecture">
+                <div class="photo-overlay">
+                    <div class="photo-title">Urban Geometry</div>
+                    <div class="photo-desc">Exploring modern architecture</div>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Mountain Landscape">
+                <div class="photo-overlay">
+                    <div class="photo-title">Mountain Dreams</div>
+                    <div class="photo-desc">Nature's majesty captured</div>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80" alt="Forest Path">
+                <div class="photo-overlay">
+                    <div class="photo-title">Misty Trails</div>
+                    <div class="photo-desc">Journey through nature</div>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Portrait">
+                <div class="photo-overlay">
+                    <div class="photo-title">Soul Portrait</div>
+                    <div class="photo-desc">Capturing human essence</div>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80" alt="Mountain Peak">
+                <div class="photo-overlay">
+                    <div class="photo-title">Summit View</div>
+                    <div class="photo-desc">Above the clouds</div>
+                </div>
+            </div>
+            <div class="photo-item">
+                <img src="https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=800&q=80" alt="Ocean Sunset">
+                <div class="photo-overlay">
+                    <div class="photo-title">Golden Hour</div>
+                    <div class="photo-desc">Sunset serenity</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog" id="blog">
+        <h2 class="section-title" id="blogTitle">Latest Articles</h2>
+        <p class="section-subtitle">Insights, tips, and stories from behind the lens</p>
+        <div class="blog-container">
+            <div class="blog-posts">
+                <article class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=800&q=80" alt="The Art of Seeing" class="blog-image">
+                    <div class="blog-content">
+                        <h3>The Art of Seeing</h3>
+                        <div class="blog-meta">October 15, 2025 • Photography</div>
+                        <p class="blog-excerpt">Photography is more than just capturing images—it's about seeing the world through a different lens. Discover how perspective shapes our visual narrative and transforms ordinary scenes into extraordinary moments that resonate deeply.</p>
+                        <a href="#" class="read-more">Read More</a>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&q=80" alt="Urban Exploration" class="blog-image">
+                    <div class="blog-content">
+                        <h3>Urban Exploration</h3>
+                        <div class="blog-meta">September 28, 2025 • Street</div>
+                        <p class="blog-excerpt">Cities are living, breathing canvases filled with geometric patterns, human stories, and architectural wonders. Discover how we navigate urban landscapes to find beauty in the most unexpected places.</p>
+                        <a href="#" class="read-more">Read More</a>
+                    </div>
+                </article>
+
+                <article class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?w=800&q=80" alt="Mastering Composition" class="blog-image">
+                    <div class="blog-content">
+                        <h3>Mastering Composition</h3>
+                        <div class="blog-meta">September 15, 2025 • Education</div>
+                        <p class="blog-excerpt">Learn the fundamental principles of photographic composition. From the rule of thirds to leading lines, we break down the essential techniques that will elevate your photography to the next level.</p>
+                        <a href="#" class="read-more">Read More</a>
+                    </div>
+                </article>
+            </div>
+
+            <aside class="sidebar">
+                <div class="sidebar-widget">
+                    <h3>Quick Tags</h3>
+                    <div class="tag-cloud">
+                        <div class="tag">Portraits</div>
+                        <div class="tag">Landscape</div>
+                        <div class="tag">Wedding</div>
+                        <div class="tag">Street</div>
+                        <div class="tag">Commercial</div>
+                        <div class="tag">Nature</div>
+                        <div class="tag">Black & White</div>
+                        <div class="tag">Editorial</div>
+                        <div class="tag">Travel</div>
+                        <div class="tag">Events</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3>Recent Posts</h3>
+                    <ul class="recent-posts">
+                        <li>The Art of Seeing</li>
+                        <li>Chasing Light</li>
+                        <li>Urban Exploration</li>
+                        <li>Mastering Composition</li>
+                        <li>Behind the Scenes</li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3>Categories</h3>
+                    <ul class="recent-posts">
+                        <li>Photography Tips</li>
+                        <li>Equipment Reviews</li>
+                        <li>Client Stories</li>
+                        <li>Behind the Lens</li>
+                        <li>Industry News</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <h2 class="section-title" id="aboutTitle">About Us</h2>
+        <p class="section-subtitle">Passion meets professionalism</p>
+        <div class="about-container">
+            <div class="about-content">
+                <h2>Creating Visual Stories Since 2010</h2>
+                <p>Lens & Light is a premier photography studio dedicated to capturing life's most precious moments with artistic excellence. Founded by a team of passionate photographers, we've built our reputation on delivering stunning imagery that exceeds expectations.</p>
+                <p>Our approach combines technical expertise with creative vision, ensuring each project receives the attention it deserves. From intimate portraits to grand celebrations, we specialize in creating timeless photographs that tell your unique story.</p>
+                <p>With over a decade of experience in the industry, we've had the privilege of working with hundreds of clients, documenting countless weddings, corporate events, and personal milestones. Our commitment to quality and customer satisfaction remains unwavering.</p>
+                
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Happy Clients</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">Projects Done</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15+</div>
+                        <div class="stat-label">Years Experience</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=800&q=80" alt="Our Studio">
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <h2 class="section-title" id="contactTitle">Get in Touch</h2>
+        <p class="section-subtitle">Let's create something beautiful together</p>
+        <div class="contact-container">
+            <form class="contact-form" id="contactForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="message">Suggestion / Feedback *</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-links">
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">LinkedIn</a>
+        </div>
+        <p>&copy; 2025 Lens & Light Photography. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroBg = document.getElementById('heroBg');
+            if (heroBg) {
+                heroBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -80px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animated elements
+        document.querySelectorAll('.section-title, .photo-item, .blog-post, .service-card, .about-content, .about-image, .contact-form').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Staggered animation for photo items
+        const photoItems = document.querySelectorAll('.photo-item');
+        photoItems.forEach((item, index) => {
+            item.style.transitionDelay = `${index * 0.1}s`;
+        });
+
+        // Staggered animation for service cards
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.15}s`;
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+    </script>
+</body>
+</html></article>
+
+                <article class="blog-post">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80" alt="Chasing Light" class="blog-image">
+                    <div class="blog-content">
+                        <h3>Chasing Light</h3>
+                        <div class="blog-meta">October 8, 2025 • Techniques</div>
+                        <p class="blog-excerpt">Light is the photographer's medium. Join us on a journey through golden hours and blue hours, where we share professional techniques for capturing nature's most beautiful lighting conditions and creating atmospheric photographs.</p>
+                        <a href="#" class="read-more">Read More</a>
+                    </div>
